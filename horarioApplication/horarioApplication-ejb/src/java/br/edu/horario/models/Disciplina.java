@@ -11,15 +11,25 @@ package br.edu.horario.models;
  * @author guilherme
  */
 public class Disciplina {
+    private int codigo;
     private String nome;
 
     public Disciplina() {
     }
 
-    public Disciplina(String nome) {
-        this.nome = nome;
+    public Disciplina(int codigo,String nome) {
+        this.nome = nome; 
     }
 
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    
     public String getNome() {
         return nome;
     }
