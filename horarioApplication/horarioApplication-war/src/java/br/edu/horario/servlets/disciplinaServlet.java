@@ -6,10 +6,11 @@
 
 package br.edu.horario.servlets;
 
+import br.edu.horario.jpa.DisciplinaFacade;
 import br.edu.horario.models.Disciplina;
-import br.edu.horario.persistence.DisciplinaManager;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,9 +23,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class disciplinaServlet extends HttpServlet {
 
-    
     @EJB
-    private DisciplinaManager manager;
+    DisciplinaFacade facade = new DisciplinaFacade();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,26 +36,51 @@ public class disciplinaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
+       response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        try {
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet disciplinaServlet</title>");            
+            out.println("<title>Servlet DisciplinaServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet disciplinaServlet at " + request.getContextPath() + "</h1>");
-            out.println("<h2>Registros:</h2>");
-            manager = new DisciplinaManager();
-            for (Disciplina d : manager.getAll()) {
-                out.println("Cod:"+d.getCodigo()+"..Disciplina:"+d.getNome());
+            out.println("<h1>Lista de Disciplinas</h1>");
+
+            out.println("<h2>Cadastrar Disciplinas</h2>");
+            out.println("<form action=\"disciplinaServlet\" method=\"post\">");
+            out.println("<table>\n<tr>");
+            out.println("<td>Nome da disciplina</td>");
+            out.println("</tr>\n<tr>");
+            out.println("<td><input name=\"nome_value\" type=\"text\" size=\"50\" value=\"nome\"/></td>");
+            out.println("</tr>\n</table>");
+            out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
+            if (request.getParameter("btn_cadastrar") != null && request.getParameter("btn_cadastrar").equals("Cadastrar")) {
+                try {
+                    out.println("<font color=\"red\">");
+                    Disciplina disc = new Disciplina(request.getParameter("nome_value"));
+                    facade.create(disc);
+                    out.println("Disciplina cadastrada com sucesso.");
+                } catch (Exception e) {
+                    out.println("Erro ao gravar Disciplina.\n");
+                    for (StackTraceElement element : e.getStackTrace()) {
+                        out.println(element+"<br>");
+                    }
+                } finally {
+                    out.println("</font>");
+                }
             }
-            
+
+            out.println("<h2>Contatos Cadastrados</h2>");
+            List<Disciplina> list = facade.findAll();
+            for (Disciplina disc : list) {
+                out.println(disc + "<br/>");
+            }
+            out.println("<br/>");
+            out.println("<a href=\".\">Voltar</a>");;
             out.println("</body>");
             out.println("</html>");
-        }catch(Exception ex){
-            response.getWriter().println("Error:"+ex.getMessage());
+        } finally {
+            out.close();
         }
     }
 

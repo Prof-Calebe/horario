@@ -6,11 +6,21 @@
 
 package br.edu.horario.models;
 
+import java.io.Serializable;
+import javax.ejb.Stateless;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 /**
  *
  * @author guilherme
  */
-public class Disciplina {
+@Entity
+public class Disciplina implements Serializable{
+    
+    private static final long serialVersionUID = 1L;
+    @Id @GeneratedValue
     private int codigo;
     private String nome;
 
@@ -18,7 +28,12 @@ public class Disciplina {
     }
 
     public Disciplina(int codigo,String nome) {
+        this.codigo = codigo;
         this.nome = nome; 
+    }
+    
+    public Disciplina(String nome){
+        this.nome = nome;
     }
 
     public int getCodigo() {
