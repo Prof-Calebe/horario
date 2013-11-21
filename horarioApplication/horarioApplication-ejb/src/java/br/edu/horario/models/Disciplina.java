@@ -29,8 +29,6 @@ public class Disciplina implements Serializable{
         return nome;
     }
 
-    
-    
     public Disciplina() {
     }
 
@@ -42,6 +40,7 @@ public class Disciplina implements Serializable{
     public Disciplina(String nome){
         this.nome = nome;
     }
+
 
     public int getCodigo() {
         return codigo;

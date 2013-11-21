@@ -6,12 +6,21 @@
 
 package br.edu.horario.models;
 
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 /**
  *
  * @author guilherme
  */
-
-public class Horario {
+@Entity
+public class Horario implements Serializable{
+    
+    private static final long serialVersionUID = 1L;
+    @Id @GeneratedValue
+    private int codigo;
     private int horario;
     private Disciplina disciplina;
     private String turma;
@@ -25,6 +34,21 @@ public class Horario {
         this.dia = dia;
     }
 
+    @Override
+    public String toString() {
+        return horario+":"+disciplina+". Turma:"+turma;
+    }
+    
+    
+    
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+    
     public EnumDiaDaSemana getDia() {
         return dia;
     }
