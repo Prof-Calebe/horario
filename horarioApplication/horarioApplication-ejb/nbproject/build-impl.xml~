@@ -792,11 +792,122 @@ exists or setup the property manually. For example like this:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="compile,-library-inclusion-in-archive-weblogic,-library-inclusion-in-archive-by-user" name="library-inclusion-in-archive"/>
-    <target if="is.jars.in.ejbjar" name="-library-inclusion-in-archive-by-user"/>
+    <target if="is.jars.in.ejbjar" name="-library-inclusion-in-archive-by-user">
+        <copyfiles files="${file.reference.sqlite-jdbc-3.7.2.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.bean-validator.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.annotation.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.ejb.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.el-api.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.el.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.enterprise.deploy.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.faces.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.jms.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.mail.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.management.j2ee.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.persistence.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.resource.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.security.auth.message.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.security.jacc.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.servlet-api.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.servlet.jsp-api.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.servlet.jsp.jstl-api.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.javax.transaction.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.jaxb-osgi.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.jaxm-api.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.jaxr-api-osgi.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.jaxrpc-api-osgi.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.jersey-core.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.webservices-api-osgi.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.webservices-osgi.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.weld-osgi-bundle.jar}" todir="${build.classes.dir}"/>
+    </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
-        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
+        <basename file="${file.reference.sqlite-jdbc-3.7.2.jar}" property="manifest.file.reference.sqlite-jdbc-3.7.2.jar"/>
+        <basename file="${file.reference.bean-validator.jar}" property="manifest.file.reference.bean-validator.jar"/>
+        <basename file="${file.reference.javax.annotation.jar}" property="manifest.file.reference.javax.annotation.jar"/>
+        <basename file="${file.reference.javax.ejb.jar}" property="manifest.file.reference.javax.ejb.jar"/>
+        <basename file="${file.reference.javax.el-api.jar}" property="manifest.file.reference.javax.el-api.jar"/>
+        <basename file="${file.reference.javax.el.jar}" property="manifest.file.reference.javax.el.jar"/>
+        <basename file="${file.reference.javax.enterprise.deploy.jar}" property="manifest.file.reference.javax.enterprise.deploy.jar"/>
+        <basename file="${file.reference.javax.faces.jar}" property="manifest.file.reference.javax.faces.jar"/>
+        <basename file="${file.reference.javax.jms.jar}" property="manifest.file.reference.javax.jms.jar"/>
+        <basename file="${file.reference.javax.mail.jar}" property="manifest.file.reference.javax.mail.jar"/>
+        <basename file="${file.reference.javax.management.j2ee.jar}" property="manifest.file.reference.javax.management.j2ee.jar"/>
+        <basename file="${file.reference.javax.persistence.jar}" property="manifest.file.reference.javax.persistence.jar"/>
+        <basename file="${file.reference.javax.resource.jar}" property="manifest.file.reference.javax.resource.jar"/>
+        <basename file="${file.reference.javax.security.auth.message.jar}" property="manifest.file.reference.javax.security.auth.message.jar"/>
+        <basename file="${file.reference.javax.security.jacc.jar}" property="manifest.file.reference.javax.security.jacc.jar"/>
+        <basename file="${file.reference.javax.servlet-api.jar}" property="manifest.file.reference.javax.servlet-api.jar"/>
+        <basename file="${file.reference.javax.servlet.jsp-api.jar}" property="manifest.file.reference.javax.servlet.jsp-api.jar"/>
+        <basename file="${file.reference.javax.servlet.jsp.jstl-api.jar}" property="manifest.file.reference.javax.servlet.jsp.jstl-api.jar"/>
+        <basename file="${file.reference.javax.transaction.jar}" property="manifest.file.reference.javax.transaction.jar"/>
+        <basename file="${file.reference.jaxb-osgi.jar}" property="manifest.file.reference.jaxb-osgi.jar"/>
+        <basename file="${file.reference.jaxm-api.jar}" property="manifest.file.reference.jaxm-api.jar"/>
+        <basename file="${file.reference.jaxr-api-osgi.jar}" property="manifest.file.reference.jaxr-api-osgi.jar"/>
+        <basename file="${file.reference.jaxrpc-api-osgi.jar}" property="manifest.file.reference.jaxrpc-api-osgi.jar"/>
+        <basename file="${file.reference.jersey-core.jar}" property="manifest.file.reference.jersey-core.jar"/>
+        <basename file="${file.reference.webservices-api-osgi.jar}" property="manifest.file.reference.webservices-api-osgi.jar"/>
+        <basename file="${file.reference.webservices-osgi.jar}" property="manifest.file.reference.webservices-osgi.jar"/>
+        <basename file="${file.reference.weld-osgi-bundle.jar}" property="manifest.file.reference.weld-osgi-bundle.jar"/>
+        <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 jar-6 jar-7 jar-8 jar-9 jar-10 jar-11 jar-12 jar-13 jar-14 jar-15 jar-16 jar-17 jar-18 jar-19 jar-20 jar-21 jar-22 jar-23 jar-24 jar-25 jar-26 jar-27 "/>
+            <attribute name="jar-1-Extension-Name" value="${manifest.file.reference.sqlite-jdbc-3.7.2.jar}"/>
+            <attribute name="jar-2-Extension-Name" value="${manifest.file.reference.bean-validator.jar}"/>
+            <attribute name="jar-3-Extension-Name" value="${manifest.file.reference.javax.annotation.jar}"/>
+            <attribute name="jar-4-Extension-Name" value="${manifest.file.reference.javax.ejb.jar}"/>
+            <attribute name="jar-5-Extension-Name" value="${manifest.file.reference.javax.el-api.jar}"/>
+            <attribute name="jar-6-Extension-Name" value="${manifest.file.reference.javax.el.jar}"/>
+            <attribute name="jar-7-Extension-Name" value="${manifest.file.reference.javax.enterprise.deploy.jar}"/>
+            <attribute name="jar-8-Extension-Name" value="${manifest.file.reference.javax.faces.jar}"/>
+            <attribute name="jar-9-Extension-Name" value="${manifest.file.reference.javax.jms.jar}"/>
+            <attribute name="jar-10-Extension-Name" value="${manifest.file.reference.javax.mail.jar}"/>
+            <attribute name="jar-11-Extension-Name" value="${manifest.file.reference.javax.management.j2ee.jar}"/>
+            <attribute name="jar-12-Extension-Name" value="${manifest.file.reference.javax.persistence.jar}"/>
+            <attribute name="jar-13-Extension-Name" value="${manifest.file.reference.javax.resource.jar}"/>
+            <attribute name="jar-14-Extension-Name" value="${manifest.file.reference.javax.security.auth.message.jar}"/>
+            <attribute name="jar-15-Extension-Name" value="${manifest.file.reference.javax.security.jacc.jar}"/>
+            <attribute name="jar-16-Extension-Name" value="${manifest.file.reference.javax.servlet-api.jar}"/>
+            <attribute name="jar-17-Extension-Name" value="${manifest.file.reference.javax.servlet.jsp-api.jar}"/>
+            <attribute name="jar-18-Extension-Name" value="${manifest.file.reference.javax.servlet.jsp.jstl-api.jar}"/>
+            <attribute name="jar-19-Extension-Name" value="${manifest.file.reference.javax.transaction.jar}"/>
+            <attribute name="jar-20-Extension-Name" value="${manifest.file.reference.jaxb-osgi.jar}"/>
+            <attribute name="jar-21-Extension-Name" value="${manifest.file.reference.jaxm-api.jar}"/>
+            <attribute name="jar-22-Extension-Name" value="${manifest.file.reference.jaxr-api-osgi.jar}"/>
+            <attribute name="jar-23-Extension-Name" value="${manifest.file.reference.jaxrpc-api-osgi.jar}"/>
+            <attribute name="jar-24-Extension-Name" value="${manifest.file.reference.jersey-core.jar}"/>
+            <attribute name="jar-25-Extension-Name" value="${manifest.file.reference.webservices-api-osgi.jar}"/>
+            <attribute name="jar-26-Extension-Name" value="${manifest.file.reference.webservices-osgi.jar}"/>
+            <attribute name="jar-27-Extension-Name" value="${manifest.file.reference.weld-osgi-bundle.jar}"/>
+        </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
+        <copyfiles files="${file.reference.sqlite-jdbc-3.7.2.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.bean-validator.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.annotation.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.ejb.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.el-api.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.el.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.enterprise.deploy.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.faces.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.jms.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.mail.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.management.j2ee.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.persistence.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.resource.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.security.auth.message.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.security.jacc.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.servlet-api.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.servlet.jsp-api.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.servlet.jsp.jstl-api.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.javax.transaction.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jaxb-osgi.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jaxm-api.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jaxr-api-osgi.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jaxrpc-api-osgi.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jersey-core.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.webservices-api-osgi.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.webservices-osgi.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.weld-osgi-bundle.jar}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">

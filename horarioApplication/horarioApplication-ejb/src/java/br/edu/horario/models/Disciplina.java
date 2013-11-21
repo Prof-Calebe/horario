@@ -24,6 +24,13 @@ public class Disciplina implements Serializable{
     private int codigo;
     private String nome;
 
+    @Override
+    public String toString() {
+        return nome;
+    }
+
+    
+    
     public Disciplina() {
     }
 
