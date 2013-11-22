@@ -18,16 +18,16 @@ import javax.persistence.Id;
 @Entity
 public class Horario implements Serializable{
     
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     @Id @GeneratedValue
     private int codigo;
-    private int horario;
+    private String horario;
     private Disciplina disciplina;
     private String turma;
     private EnumDiaDaSemana dia;
 
     public Horario(){}
-    public Horario(int horario, Disciplina disciplina, String turma, EnumDiaDaSemana dia) {
+    public Horario(String horario, Disciplina disciplina, String turma, EnumDiaDaSemana dia) {
         this.horario = horario;
         this.disciplina = disciplina;
         this.turma = turma;
@@ -57,11 +57,11 @@ public class Horario implements Serializable{
         this.dia = dia;
     }
 
-    public int getHorario() {
+    public String getHorario() {
         return horario;
     }
 
-    public void setHorario(int horario) {
+    public void setHorario(String horario) {
         this.horario = horario;
     }
 

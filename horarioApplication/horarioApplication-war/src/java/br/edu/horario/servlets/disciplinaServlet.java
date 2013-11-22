@@ -50,8 +50,7 @@ public class disciplinaServlet extends HttpServlet {
             out.println("<form action=\"disciplinaServlet\" method=\"post\">");
             out.println("<table>\n<tr>");
             out.println("<td>Nome da disciplina</td>");
-            out.println("</tr>\n<tr>");
-            out.println("<td><input name=\"nome_value\" type=\"text\" size=\"50\" value=\"nome\"/></td>");
+            out.println("<td><input name=\"nome_value\" type=\"text\" size=\"50\" /></td>");
             out.println("</tr>\n</table>");
             out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
             if (request.getParameter("btn_cadastrar") != null && request.getParameter("btn_cadastrar").equals("Cadastrar")) {
@@ -70,7 +69,7 @@ public class disciplinaServlet extends HttpServlet {
                 }
             }
 
-            out.println("<h2>Contatos Cadastrados</h2>");
+            out.println("<h2>Disciplinas Cadastrados</h2>");
             List<Disciplina> list = facade.findAll();
             for (Disciplina disc : list) {
                 out.println(disc + "<br/>");

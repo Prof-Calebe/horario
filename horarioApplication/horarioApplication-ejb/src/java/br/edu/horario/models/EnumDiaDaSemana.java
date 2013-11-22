@@ -6,10 +6,13 @@
 
 package br.edu.horario.models;
 
+import javax.ejb.Stateless;
+
 /**
  *
  * @author guilherme
  */
+//@Stateless(mappedName = "ejb/EnumDiaDaSemana")
 public enum EnumDiaDaSemana {
     SEGUNDA,
     TERCA,

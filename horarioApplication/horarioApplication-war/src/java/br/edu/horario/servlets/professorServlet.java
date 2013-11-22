@@ -6,41 +6,29 @@
 
 package br.edu.horario.servlets;
 
-import br.edu.horario.jpa.DisciplinaFacade;
-import br.edu.horario.jpa.HorarioFacade;
 import br.edu.horario.jpa.ProfessorFacade;
-import br.edu.horario.jpa.ReservaFacade;
-import br.edu.horario.jpa.SalaFacade;
 import br.edu.horario.models.Disciplina;
-import br.edu.horario.models.EnumDiaDaSemana;
-import br.edu.horario.models.Horario;
 import br.edu.horario.models.Professor;
-import br.edu.horario.models.Reserva;
-import br.edu.horario.models.Sala;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author guilherme
+ * @author GuilhermeA
  */
-public class reservaServlet extends HttpServlet {
-    @EJB
-    ReservaFacade reservaFacade = new ReservaFacade();
-    @EJB
-    HorarioFacade horarioFacade = new HorarioFacade();
-    @EJB
-    ProfessorFacade professorFacade = new ProfessorFacade();
-    @EJB
-    SalaFacade salaFacade = new SalaFacade();
-    @EJB
-    DisciplinaFacade disciplinaFacade = new DisciplinaFacade();
+@WebServlet(name = "professorServlet", urlPatterns = {"/professorServlet"})
+public class professorServlet extends HttpServlet {
+
+    @EJB 
+    ProfessorFacade facade = new ProfessorFacade();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -58,55 +46,30 @@ public class reservaServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet reservaServlet</title>");            
+            out.println("<title>Servlet professorServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Lista de Reservas</h1>");
+            out.println("<h1>Lista de Professores</h1>");
 
-            out.println("<h2>Cadastrar Reserva</h2>");
-            out.println("<form action=\"reservaServlet\" method=\"post\">");
+            out.println("<h2>Cadastrar Professores</h2>");
+            out.println("<form action=\"professorServlet\" method=\"post\">");
             out.println("<table>\n<tr>");
-            out.println("<td>Horario</td>");
-            out.println("<td><select name=\"horario\">");
-            List<Horario> lsHorarios = horarioFacade.findAll();
-            for (Horario hor : lsHorarios) {
-                out.println("<option value="+hor.getCodigo()+">"+hor.getHorario()+"</option>" );
-            }
-            out.println("</select></td>");
-            out.println("</tr><tr>");
-            out.println("<td>Sala</td>");
-            out.println("<td><select name=\"sala\">");
-            List<Sala> lsSalas = salaFacade.findAll();
-            for (Sala sala : lsSalas) {
-                out.println("<option value="+sala.getCodigo()+">"+sala.toString()+"</option>" );
-            }
-            out.println("</select></td>");
-            out.println("</tr><tr>");
-            out.println("<td>Professor</td>");
-            out.println("<td><select name=\"professor\">");
-            List<Professor> lsProfessor = professorFacade.findAll();
-            for (Professor prof : lsProfessor) {
-                out.println("<option value="+prof.getCodigo()+">"+prof.getNome()+"</option>" );
-            }
-            out.println("</select></td>");
-            out.println("</tr><tr>");
-            out.println("<td>Disciplina</td>");
-            out.println("<td><select name=\"disciplina\">");
-            List<Disciplina> lsDisciplinas = disciplinaFacade.findAll();
-            for (Disciplina dis : lsDisciplinas) {
-                out.println("<option value="+dis.getCodigo()+">"+dis.getNome()+"</option>" );
-            }
-            out.println("</select></td>");
+            out.println("<td>Nome do professor</td>");
+            out.println("<td><input name=\"nome_value\" type=\"text\" size=\"50\" /></td>");
             out.println("</tr>\n</table>");
+            out.println("</tr><tr>");
+            out.println("<td>TIA</td>");
+            out.println("</tr><tr>");
+            out.println("<td><input name=\"tia_value\" type=\"text\" size=\"50\"/></td>");
             out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
             if (request.getParameter("btn_cadastrar") != null && request.getParameter("btn_cadastrar").equals("Cadastrar")) {
                 try {
                     out.println("<font color=\"red\">");
-                    Reserva res = new Reserva(salaFacade.find(Integer.parseInt(request.getParameter("sala"))),horarioFacade.find(Integer.parseInt(request.getParameter("horario"))),disciplinaFacade.find(Integer.parseInt(request.getParameter("disciplina"))),professorFacade.find(Integer.parseInt(request.getParameter("professor"))));
-                    reservaFacade.create(res);
-                    out.println("Reserva cadastrada com sucesso.");
+                    Professor prof = new Professor(request.getParameter("nome_value"),request.getParameter("tia_value"));
+                    facade.create(prof);
+                    out.println("Professor cadastrado com sucesso.");
                 } catch (Exception e) {
-                    out.println("Erro ao gravar Reserva.\n");
+                    out.println("Erro ao gravar Professor.\n");
                     for (StackTraceElement element : e.getStackTrace()) {
                         out.println(element+"<br>");
                     }
@@ -115,10 +78,10 @@ public class reservaServlet extends HttpServlet {
                 }
             }
 
-            out.println("<h2>Reservas Cadastrados</h2>");
-            List<Reserva> list = reservaFacade.findAll();
-            for (Reserva res : list) {
-                out.println(res + "<br/>");
+            out.println("<h2>Professores Cadastrados</h2>");
+            List<Professor> list = facade.findAll();
+            for (Professor prof : list) {
+                out.println(prof + "<br/>");
             }
             out.println("<br/>");
             out.println("<a href=\".\">Voltar</a>");

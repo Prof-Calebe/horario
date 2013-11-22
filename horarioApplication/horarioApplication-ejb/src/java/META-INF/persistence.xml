@@ -4,6 +4,10 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>jdbc/sample</jta-data-source>
     <class>br.edu.horario.models.Disciplina</class>
+    <class>br.edu.horario.models.Horario</class>
+    <class>br.edu.horario.models.Professor</class>
+    <class>br.edu.horario.models.Reserva</class>
+    <class>br.edu.horario.models.Sala</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <!--      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/sample"/>

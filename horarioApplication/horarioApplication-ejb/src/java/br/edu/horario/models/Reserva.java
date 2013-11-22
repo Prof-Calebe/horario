@@ -18,7 +18,7 @@ import javax.persistence.Id;
 @Entity
 public class Reserva implements Serializable{
     
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
     @Id @GeneratedValue
     private int codigo;
     private Sala sala;

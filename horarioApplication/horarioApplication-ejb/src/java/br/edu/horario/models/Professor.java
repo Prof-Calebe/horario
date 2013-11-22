@@ -18,7 +18,7 @@ import javax.persistence.Id;
 @Entity
 public class Professor implements Serializable{
     
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3L;
     @Id @GeneratedValue
     private int codigo;
     private String nome;
