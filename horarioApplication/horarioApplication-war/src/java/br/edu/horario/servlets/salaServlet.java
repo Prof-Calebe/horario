@@ -47,21 +47,60 @@ public class salaServlet extends HttpServlet {
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet salaServlet</title>");            
+            out.println("<script type=\"text/javascript\">");
+            out.println("function changeFunc(){");      
+            out.println("var selectBox = document.getElementById(\"salas\");");
+            out.println("var selectedValue = selectBox.options[selectBox.selectedIndex].value;");
+            out.println("if(selectedValue!=0) window.location.href='salaServlet?mode=edit&cod='+selectedValue;}</script>");
             out.println("</head>");
             out.println("<body>");
-             out.println("<h1>Lista de Salas</h1>");
-
-            out.println("<h2>Cadastrar Salas</h2>");
-            out.println("<form action=\"salaServlet\" method=\"post\">");
-            out.println("<table>\n<tr>");
-            out.println("<td>Numero da Sala</td>");
-            out.println("<td><input name=\"sala_value\" type=\"text\" size=\"50\" /></td>");
-            out.println("</tr>\n</table>");
-            out.println("</tr><tr>");
-            out.println("<td>Numero do predio</td>");
-            out.println("</tr><tr>");
-            out.println("<td><input name=\"predio_value\" type=\"text\" size=\"50\"/></td>");
-            out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
+            out.println("<div id=\"header\" width='100%'>");
+            out.println("<a href='salaServlet?mode=cad'>Cadastrar</a>");
+            out.println("<a href='salaServlet?mode=edit'>Editar</a>");
+            out.println("<a href='salaServlet?mode=list'>Listar</a>");
+            out.println("</div>");
+            out.println("<hr>");
+            if(request.getParameter("mode")!=null && request.getParameter("mode").equals("cad")){
+                out.println("<h2>Cadastrar Salas</h2>");
+                out.println("<form action=\"salaServlet?mode=cad\" method=\"post\">");
+                out.println("<table>\n<tr>");
+                out.println("<td>Numero da Sala</td>");
+                out.println("<td><input name=\"sala_value\" type=\"text\" size=\"50\" /></td>");
+                out.println("</tr>\n</table>");
+                out.println("</tr><tr>");
+                out.println("<td>Numero do predio</td>");
+                out.println("</tr><tr>");
+                out.println("<td><input name=\"predio_value\" type=\"text\" size=\"50\"/></td>");
+                out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
+            }else if(request.getParameter("mode")!=null && request.getParameter("mode").equals("edit")){
+                out.println("<h2>Editar Sala</h2>");
+                out.println("<form action=\"salaServlet?mode=edit\" method=\"post\">");
+                out.println("<table>\n<tr>");
+                 out.println("<select id=\"salas\" name=\"salas\" onchange=\"changeFunc();\">");
+                List<Sala> list = salaFacade.findAll();
+                out.println("<option value=0 selected=\"true\">Selecione uma sala</option>");
+                for (Sala sala : list) {
+                    out.println("<option value="+sala.getCodigo()+">"+sala.toString()+"</option>" );
+                }
+                out.println("</select></tr>");
+                if(request.getParameter("cod")!=null){
+                    Sala sala = salaFacade.find(Integer.parseInt(request.getParameter("cod")));
+                    out.println("<tr><td>"+sala.getCodigo()+"</td>");
+                    out.println("<td><input name=\"cod_value\" type=\"hidden\" size=\"50\" value=\""+sala.getCodigo()+"\" /></td>");
+                    out.println("<td>Predio</td>");
+                    out.println("<td><input name=\"predio_value\" type=\"text\" size=\"50\" value=\""+sala.getNumeroPredio()+"\" /></td>");
+                    out.println("<td>Sala</td>");
+                    out.println("<td><input name=\"sala_value\" type=\"text\" size=\"50\" value=\""+sala.getNumeroSala()+"\"/></td>");
+                    out.println("</tr>\n</table>");
+                    out.println("<input name=\"btn_editar\" type=\"submit\" value=\"Editar\"/><input name=\"btn_deletar\" type=\"submit\" value=\"Deletar\"/>\n</form>");
+                }
+            } else if(request.getParameter("mode")!=null && request.getParameter("mode").equals("list")){
+                out.println("<h2>Salas Cadastrados</h2>");
+                List<Sala> list = salaFacade.findAll();
+                for (Sala sala : list) {
+                    out.println(sala + "<br/>");
+                }
+            }
             if (request.getParameter("btn_cadastrar") != null && request.getParameter("btn_cadastrar").equals("Cadastrar")) {
                 try {
                     out.println("<font color=\"red\">");
@@ -69,7 +108,37 @@ public class salaServlet extends HttpServlet {
                     salaFacade.create(sala);
                     out.println("Sala cadastrada com sucesso.");
                 } catch (Exception e) {
-                    out.println("Erro ao gravar Professor.\n");
+                    out.println("Erro ao gravar Sala.\n");
+                    for (StackTraceElement element : e.getStackTrace()) {
+                        out.println(element+"<br>");
+                    }
+                } finally {
+                    out.println("</font>");
+                }
+            }else if (request.getParameter("btn_editar") != null && request.getParameter("btn_editar").equals("Editar")) {
+                try {
+                    out.println("<font color=\"red\">");
+                    Sala sala = salaFacade.find(Integer.parseInt(request.getParameter("cod_value")));
+                    sala.setNumeroPredio(request.getParameter("sala_value"));
+                    sala.setNumeroSala(request.getParameter("predio_value"));
+                    salaFacade.edit(sala);
+                    out.println("Sala alterada com sucesso.");
+                } catch (Exception e) {
+                    out.println("Erro ao gravar Sala.\n");
+                    for (StackTraceElement element : e.getStackTrace()) {
+                        out.println(element+"<br>");
+                    }
+                } finally {
+                    out.println("</font>");
+                }
+            }else if (request.getParameter("btn_deletar") != null && request.getParameter("btn_deletar").equals("Deletar")) {
+                try {
+                    out.println("<font color=\"red\">");
+                    Sala sala = salaFacade.find(Integer.parseInt(request.getParameter("cod_value")));
+                    salaFacade.remove(sala);
+                    out.println("Sala removida com sucesso.");
+                } catch (Exception e) {
+                    out.println("Erro ao gravar Sala.\n");
                     for (StackTraceElement element : e.getStackTrace()) {
                         out.println(element+"<br>");
                     }
@@ -78,11 +147,6 @@ public class salaServlet extends HttpServlet {
                 }
             }
 
-            out.println("<h2>Salas Cadastrados</h2>");
-            List<Sala> list = salaFacade.findAll();
-            for (Sala sala : list) {
-                out.println(sala + "<br/>");
-            }
             out.println("<br/>");
             out.println("<a href=\".\">Voltar</a>");;
             out.println("</body>");
