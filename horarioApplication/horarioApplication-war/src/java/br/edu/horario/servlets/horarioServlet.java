@@ -95,7 +95,7 @@ public class horarioServlet extends HttpServlet {
                 if(request.getParameter("cod")!=null){
                     cod = request.getParameter("cod");
                     Horario h = facade.find(Integer.parseInt(cod));
-                
+                    out.println("</tr><hr><tr>");
                     out.print("<td id=\"cod\">"+h.getCodigo()+"</td>");
                     out.println("<td><input id=\"cod_value\" name=\"cod_value\" type=\"hidden\" size=\"50\" value=\""+h.getCodigo()+"\" /></td>");
                     out.println("<td>Horario</td>");

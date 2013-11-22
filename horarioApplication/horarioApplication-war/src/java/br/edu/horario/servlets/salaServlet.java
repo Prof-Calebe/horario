@@ -84,6 +84,7 @@ public class salaServlet extends HttpServlet {
                 }
                 out.println("</select></tr>");
                 if(request.getParameter("cod")!=null){
+                    out.println("</tr><hr><tr>");
                     Sala sala = salaFacade.find(Integer.parseInt(request.getParameter("cod")));
                     out.println("<tr><td>"+sala.getCodigo()+"</td>");
                     out.println("<td><input name=\"cod_value\" type=\"hidden\" size=\"50\" value=\""+sala.getCodigo()+"\" /></td>");

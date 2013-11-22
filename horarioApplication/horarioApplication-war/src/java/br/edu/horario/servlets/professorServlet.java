@@ -84,6 +84,7 @@ public class professorServlet extends HttpServlet {
                 }
                 out.println("</select></tr>");
                 if(request.getParameter("cod")!=null){
+                    out.println("</tr><hr><tr>");
                     Professor prof = facade.find(Integer.parseInt(request.getParameter("cod")));
                     out.println("<tr><td>"+prof.getCodigo()+"</td>");
                     out.println("<td><input name=\"cod_value\" type=\"hidden\" size=\"50\" value=\""+prof.getCodigo()+"\" /></td>");

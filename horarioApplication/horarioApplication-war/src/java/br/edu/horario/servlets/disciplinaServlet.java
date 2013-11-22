@@ -37,18 +37,14 @@ public class disciplinaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
+        try (PrintWriter out = response.getWriter()) {
             out.println("<html>");
             out.println("<head>");
             out.println("<script type=\"text/javascript\">");
             out.println("function changeFunc(){");      
             out.println("var selectBox = document.getElementById(\"disciplinas\");");
             out.println("var selectedValue = selectBox.options[selectBox.selectedIndex].value;");
-            out.println("var selectedText = selectBox.options[selectBox.selectedIndex].label;");
-            out.println("document.getElementById(\"nome_value\").value = selectedText;");
-            out.println("document.getElementById(\"cod_value\").value = selectedValue;");
-            out.println("document.getElementById(\"cod\").innerText = selectedValue;}</script>");
+            out.println("if(selectedValue!=0) window.location.href='disciplinaServlet?mode=edit&cod='+selectedValue;}</script>");
 
             out.println("<title>Servlet DisciplinaServlet</title>");
             out.println("</head>");
@@ -61,7 +57,6 @@ public class disciplinaServlet extends HttpServlet {
             out.println("<hr>");
             //HTML Cadastro  
             if(request.getParameter("mode") != null && request.getParameter("mode").equals("cad")){
-                out.println("<h1>Lista de Disciplinas</h1>");
                 out.println("<h2>Cadastrar Disciplinas</h2>");
                 out.println("<form action=\"disciplinaServlet?mode=cad\" method=\"post\">");
                 out.println("<table>\n<tr>");
@@ -71,24 +66,28 @@ public class disciplinaServlet extends HttpServlet {
                 out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
             //HTML Edit/Delete
             }else if(request.getParameter("mode") != null && request.getParameter("mode").equals("edit")){
-                out.println("<h1>Lista de Disciplinas</h1>");
                 out.println("<h2>Editar Disciplinas</h2>");
                 out.println("<form action=\"disciplinaServlet?mode=edit\" method=\"post\">");
                 out.println("<table>\n<tr>");
-                out.println("<select value=\"Disciplina\" id=\"disciplinas\" name=\"disciplinas\" onchange=\"changeFunc();\">");
+                out.println("<select  id=\"disciplinas\" name=\"disciplinas\" onchange=\"changeFunc();\">");
+                out.println("<option value=0 selected=\"true\">Selecione uma disciplina</option>");
                 List<Disciplina> list = facade.findAll();
                 for (Disciplina disc : list) {
                     out.println("<option value="+disc.getCodigo()+">"+disc.getNome()+"</option>" );
                 }
-                out.println("<tr>");
-                out.print("<td id=\"cod\"></td>");
-                out.println("<td><input id=\"cod_value\" name=\"cod_value\" type=\"hidden\" size=\"50\"  /></td>");
-                out.println("<td>Disciplina</td>");
-                out.println("<td><input id=\"nome_value\" name=\"nome_value\" type=\"text\" size=\"50\"  /></td>");
-                out.println("</tr>");
-                out.println("</select>");
-                out.println("</tr>\n</table>");
-                out.println("<input name=\"btn_editar\" type=\"submit\" value=\"Editar\"/><input name=\"btn_deletar\" type=\"submit\" value=\"Deletar\"/>\n</form>");
+                if(request.getParameter("cod")!=null){
+                    Disciplina dis = facade.find(Integer.parseInt(request.getParameter("cod")));
+                    out.println("<tr>");
+                    out.println("</tr><hr><tr>");
+                    out.print("<td id=\"cod\">"+dis.getCodigo()+"</td>");
+                    out.println("<td><input id=\"cod_value\" name=\"cod_value\" type=\"hidden\" size=\"50\" value=\""+dis.getCodigo()+"\"  /></td>");
+                    out.println("<td>Disciplina</td>");
+                    out.println("<td><input id=\"nome_value\" name=\"nome_value\" type=\"text\" size=\"50\" value=\""+dis.getNome()+"\" /></td>");
+                    out.println("</tr>");
+                    out.println("</select>");
+                    out.println("</tr>\n</table>");
+                    out.println("<input name=\"btn_editar\" type=\"submit\" value=\"Editar\"/><input name=\"btn_deletar\" type=\"submit\" value=\"Deletar\"/>\n</form>");
+                }
             //HTML listar
             }else{
                 out.println("<h2>Disciplinas Cadastrados</h2>");
@@ -150,9 +149,8 @@ public class disciplinaServlet extends HttpServlet {
             out.println("<a href=\".\">Voltar</a>");;
             out.println("</body>");
             out.println("</html>");
-        } finally {
-            out.close();
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

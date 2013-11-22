@@ -60,45 +60,132 @@ public class reservaServlet extends HttpServlet {
             out.println("<head>");
             out.println("<title>Servlet reservaServlet</title>");            
             out.println("</head>");
+             out.println("<script type=\"text/javascript\">");
+            out.println("function changeFunc(){");      
+            out.println("var selectBox = document.getElementById(\"reservas\");");
+            out.println("var selectedValue = selectBox.options[selectBox.selectedIndex].value;");
+            out.println("if(selectedValue!=0) window.location.href='reservaServlet?mode=edit&cod='+selectedValue;}</script>");
+            out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Lista de Reservas</h1>");
+            out.println("<div id=\"header\" width='100%'>");
+            out.println("<a href='reservaServlet?mode=cad'>Cadastrar</a>");
+            out.println("<a href='reservaServlet?mode=edit'>Editar</a>");
+            out.println("<a href='reservaServlet?mode=list'>Listar</a>");
+            out.println("</div>");
+            out.println("<hr>");
+            if(request.getParameter("mode")!=null && request.getParameter("mode").equals("cad")){
 
-            out.println("<h2>Cadastrar Reserva</h2>");
-            out.println("<form action=\"reservaServlet\" method=\"post\">");
-            out.println("<table>\n<tr>");
-            out.println("<td>Horario</td>");
-            out.println("<td><select name=\"horario\">");
-            List<Horario> lsHorarios = horarioFacade.findAll();
-            for (Horario hor : lsHorarios) {
-                out.println("<option value="+hor.getCodigo()+">"+hor.getHorario()+"</option>" );
+                out.println("<h2>Cadastrar Reserva</h2>");
+                out.println("<form action=\"reservaServlet?mode=cad\" method=\"post\">");
+                out.println("<table>\n<tr>");
+                out.println("<td>Horario</td>");
+                out.println("<td><select name=\"horario\">");
+                List<Horario> lsHorarios = horarioFacade.findAll();
+                for (Horario hor : lsHorarios) {
+                    out.println("<option value="+hor.getCodigo()+">"+hor.getHorario()+"</option>" );
+                }
+                out.println("</select></td>");
+                out.println("</tr><tr>");
+                out.println("<td>Sala</td>");
+                out.println("<td><select name=\"sala\">");
+                List<Sala> lsSalas = salaFacade.findAll();
+                for (Sala sala : lsSalas) {
+                    out.println("<option value="+sala.getCodigo()+">"+sala.toString()+"</option>" );
+                }
+                out.println("</select></td>");
+                out.println("</tr><tr>");
+                out.println("<td>Professor</td>");
+                out.println("<td><select name=\"professor\">");
+                List<Professor> lsProfessor = professorFacade.findAll();
+                for (Professor prof : lsProfessor) {
+                    out.println("<option value="+prof.getCodigo()+">"+prof.getNome()+"</option>" );
+                }
+                out.println("</select></td>");
+                out.println("</tr><tr>");
+                out.println("<td>Disciplina</td>");
+                out.println("<td><select name=\"disciplina\">");
+                List<Disciplina> lsDisciplinas = disciplinaFacade.findAll();
+                for (Disciplina dis : lsDisciplinas) {
+                    out.println("<option value="+dis.getCodigo()+">"+dis.getNome()+"</option>" );
+                }
+                out.println("</select></td>");
+                out.println("</tr>\n</table>");
+                out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
+            }else if(request.getParameter("mode")!=null && request.getParameter("mode").equals("edit")){
+                out.println("<h2>Alteracao Reserva</h2>");
+                out.println("<form action=\"reservaServlet?mode=edit\" method=\"post\">");
+                
+                out.println("Reservas");
+                out.println("<select name=\"reservas\" id=\"reservas\" onchange=\"changeFunc();\">");
+                out.println("<option value=0 selected=\"true\">Selecione uma reserva</option>");
+                List<Reserva> lsReservas = reservaFacade.findAll();
+                for (Reserva res : lsReservas) {
+                    out.println("<option value="+res.getCodigo()+">"+res.toString()+"</option>" );
+                }
+                out.println("</select>");
+                out.println("<table>\n");
+                out.println("</tr><tr>");
+                if(request.getParameter("cod")!=null){
+                    Reserva res = reservaFacade.find(Integer.parseInt(request.getParameter("cod")));
+                    out.println("<td><input name=\"cod_value\" type=\"hidden\" size=\"50\" value=\""+res.getCodigo()+"\" /></td>");
+                    out.println("</tr><hr><tr>");
+                    out.println("<td>Horario</td>");
+                    out.println("<td><select name=\"horario\">");
+                    List<Horario> lsHorarios = horarioFacade.findAll();
+                    for (Horario hor : lsHorarios) {
+                        if(res.getHorario().getCodigo()==hor.getCodigo()){
+                            out.println("<option selected=\"true\" value="+hor.getCodigo()+">"+hor.getHorario()+"</option>" );
+                        }else{
+                            out.println("<option value="+hor.getCodigo()+">"+hor.getHorario()+"</option>" );
+                        }
+                    }
+                    out.println("</select></td>");
+                    out.println("</tr><tr>");
+                    out.println("<td>Sala</td>");
+                    out.println("<td><select name=\"sala\">");
+                    List<Sala> lsSalas = salaFacade.findAll();
+                    for (Sala sala : lsSalas) {
+                        if(sala.getCodigo()==res.getSala().getCodigo()){
+                           out.println("<option selected=\"true\" value="+sala.getCodigo()+">"+sala.toString()+"</option>" );
+                        }else{
+                           out.println("<option value="+sala.getCodigo()+">"+sala.toString()+"</option>" );
+                        }
+                    }
+                    out.println("</select></td>");
+                    out.println("</tr><tr>");
+                    out.println("<td>Professor</td>");
+                    out.println("<td><select name=\"professor\">");
+                    List<Professor> lsProfessor = professorFacade.findAll();
+                    for (Professor prof : lsProfessor) {
+                        if(prof.getCodigo()==res.getProfessor().getCodigo()){
+                            out.println("<option selected=\"true\" value="+prof.getCodigo()+">"+prof.getNome()+"</option>" );
+                        }else{
+                            out.println("<option value="+prof.getCodigo()+">"+prof.getNome()+"</option>" );
+                        }
+                    }
+                    out.println("</select></td>");
+                    out.println("</tr><tr>");
+                    out.println("<td>Disciplina</td>");
+                    out.println("<td><select name=\"disciplina\">");
+                    List<Disciplina> lsDisciplinas = disciplinaFacade.findAll();
+                    for (Disciplina dis : lsDisciplinas) {
+                        if(dis.getCodigo()==res.getDisciplina().getCodigo()){
+                            out.println("<option selected=\"true\" value="+dis.getCodigo()+">"+dis.getNome()+"</option>" );
+                        }else{
+                            out.println("<option value="+dis.getCodigo()+">"+dis.getNome()+"</option>" );
+                        }
+                    }
+                    out.println("</select></td>");
+                    out.println("</tr>\n</table>");
+                    out.println("<input name=\"btn_editar\" type=\"submit\" value=\"Editar\"/><input name=\"btn_deletar\" type=\"submit\" value=\"Deletar\"/>\n</form>");
+                }
+            }else{
+                out.println("<h2>Reservas Cadastrados</h2>");
+                List<Reserva> list = reservaFacade.findAll();
+                for (Reserva res : list) {
+                    out.println(res + "<br/>");
+                }                
             }
-            out.println("</select></td>");
-            out.println("</tr><tr>");
-            out.println("<td>Sala</td>");
-            out.println("<td><select name=\"sala\">");
-            List<Sala> lsSalas = salaFacade.findAll();
-            for (Sala sala : lsSalas) {
-                out.println("<option value="+sala.getCodigo()+">"+sala.toString()+"</option>" );
-            }
-            out.println("</select></td>");
-            out.println("</tr><tr>");
-            out.println("<td>Professor</td>");
-            out.println("<td><select name=\"professor\">");
-            List<Professor> lsProfessor = professorFacade.findAll();
-            for (Professor prof : lsProfessor) {
-                out.println("<option value="+prof.getCodigo()+">"+prof.getNome()+"</option>" );
-            }
-            out.println("</select></td>");
-            out.println("</tr><tr>");
-            out.println("<td>Disciplina</td>");
-            out.println("<td><select name=\"disciplina\">");
-            List<Disciplina> lsDisciplinas = disciplinaFacade.findAll();
-            for (Disciplina dis : lsDisciplinas) {
-                out.println("<option value="+dis.getCodigo()+">"+dis.getNome()+"</option>" );
-            }
-            out.println("</select></td>");
-            out.println("</tr>\n</table>");
-            out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
             if (request.getParameter("btn_cadastrar") != null && request.getParameter("btn_cadastrar").equals("Cadastrar")) {
                 try {
                     out.println("<font color=\"red\">");
@@ -113,13 +200,40 @@ public class reservaServlet extends HttpServlet {
                 } finally {
                     out.println("</font>");
                 }
+            }else if (request.getParameter("btn_editar") != null && request.getParameter("btn_editar").equals("Editar")) {
+                try {
+                    out.println("<font color=\"red\">");
+                    Reserva res = reservaFacade.find(Integer.parseInt(request.getParameter("cod_value")));
+                    res.setSala(salaFacade.find(Integer.parseInt(request.getParameter("sala"))));
+                    res.setHorario(horarioFacade.find(Integer.parseInt(request.getParameter("horario"))));
+                    res.setDisciplina(disciplinaFacade.find(Integer.parseInt(request.getParameter("disciplina"))));
+                    res.setProfessor(professorFacade.find(Integer.parseInt(request.getParameter("professor"))));
+                    reservaFacade.edit(res);
+                    out.println("Reserva editada com sucesso.");
+                } catch (Exception e) {
+                    out.println("Erro ao gravar Reserva.\n");
+                    for (StackTraceElement element : e.getStackTrace()) {
+                        out.println(element+"<br>");
+                    }
+                } finally {
+                    out.println("</font>");
+                }
+            }else if (request.getParameter("btn_deletar") != null && request.getParameter("btn_deletar").equals("Deletar")) {
+                try {
+                    out.println("<font color=\"red\">");
+                    Reserva res = reservaFacade.find(Integer.parseInt(request.getParameter("cod_value")));
+                    reservaFacade.remove(res);
+                    out.println("Reserva deletada com sucesso.");
+                } catch (Exception e) {
+                    out.println("Erro ao gravar Reserva.\n");
+                    for (StackTraceElement element : e.getStackTrace()) {
+                        out.println(element+"<br>");
+                    }
+                } finally {
+                    out.println("</font>");
+                }
             }
 
-            out.println("<h2>Reservas Cadastrados</h2>");
-            List<Reserva> list = reservaFacade.findAll();
-            for (Reserva res : list) {
-                out.println(res + "<br/>");
-            }
             out.println("<br/>");
             out.println("<a href=\".\">Voltar</a>");
             out.println("</body>");
