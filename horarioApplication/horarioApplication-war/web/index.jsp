@@ -15,7 +15,7 @@
         <h1>Menu</h1>
         <a href="disciplinaServlet?mode=cad">Disciplinas</a><br/>
         <a href="horarioServlet?mode=cad">Horarios</a><br/>
-        <a href="professorServlet">Professores</a><br/>
+        <a href="professorServlet?mode=cad">Professores</a><br/>
         <a href="salaServlet">Sala</a><br/>
         <a href="reservaServlet">Reservas</a><br/>
     </body>
