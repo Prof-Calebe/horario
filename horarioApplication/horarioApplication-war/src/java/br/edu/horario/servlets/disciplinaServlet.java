@@ -53,7 +53,7 @@ public class disciplinaServlet extends HttpServlet {
             out.println("<title>Servlet DisciplinaServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<div id=\"hearder\" width='100%'>");
+            out.println("<div id=\"header\" width='100%'>");
             out.println("<a href='disciplinaServlet?mode=cad'>Cadastrar</a>");
             out.println("<a href='disciplinaServlet?mode=edit'>Editar</a>");
             out.println("<a href='disciplinaServlet?mode=list'>Listar</a>");

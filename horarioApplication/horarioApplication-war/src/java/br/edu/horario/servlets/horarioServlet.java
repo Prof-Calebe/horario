@@ -49,25 +49,92 @@ public class horarioServlet extends HttpServlet {
             out.println("<html>");
             out.println("<head>");
             out.println("<title>Servlet HorarioServlet</title>");
+            out.println("<script type=\"text/javascript\">");
+            out.println("function changeFunc(){");      
+            out.println("var selectBox = document.getElementById(\"horarios\");");
+            out.println("var selectedValue = selectBox.options[selectBox.selectedIndex].value;");
+            out.println("if(selectedValue!=0) window.location.href='horarioServlet?mode=edit&cod='+selectedValue;}</script>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Lista de Horarios</h1>");
+            out.println("<div id=\"header\" width='100%'>");
+            out.println("<a href='horarioServlet?mode=cad'>Cadastrar</a>");
+            out.println("<a href='horarioServlet?mode=edit'>Editar</a>");
+            out.println("<a href='horarioServlet?mode=list'>Listar</a>");
+            out.println("</div>");
+            out.println("<hr>");
+            if(request.getParameter("mode")!= null && request.getParameter("mode").equals("cad")){
+                out.println("<h2>Cadastrar Horario</h2>");
+                out.println("<form action=\"horarioServlet?mode=cad\" method=\"post\">");
+                out.println("<table>\n<tr>");
+                out.println("<td>Horario</td>");
+                out.println("<td><input name=\"horario_value\" type=\"text\" size=\"50\" value=\"\"/></td>");
+                out.println("</tr><tr>");
+                out.println("<td>Disciplina</td>");
+                out.println("<td><select name=\"disciplina\">");
+                List<Disciplina> lsDisciplinas = disciplinaFacade.findAll();
+                for (Disciplina dis : lsDisciplinas) {
+                    out.println("<option value="+dis.getCodigo()+">"+dis.getNome()+"</option>" );
+                }
+                out.println("</select></td>");
+                out.println("</tr>\n</table>");
+                out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
+            } else if(request.getParameter("mode")!= null && request.getParameter("mode").equals("edit")){
+                out.println("<h2>Editar Horarios</h2>");
+                out.println("<form action=\"horarioServlet?mode=edit\" method=\"post\">");
+                out.println("<table>\n<tr>");
+                out.println("<select value=\"Horario\" id=\"horarios\" name=\"horarios\" onchange=\"changeFunc();\">");
+                List<Horario> list = facade.findAll();
+                out.println("<option value=0 selected=\"true\">Selecione uma horario</option>");
+                for (Horario hor : list) {
+                    out.println("<option value="+hor.getCodigo()+">"+hor.toString()+"</option>" );
+                }
+                out.println("</select></tr>");
+                out.println("<tr>");
+                String cod = null;
+                
+                if(request.getParameter("cod")!=null){
+                    cod = request.getParameter("cod");
+                    Horario h = facade.find(Integer.parseInt(cod));
+                
+                    out.print("<td id=\"cod\">"+h.getCodigo()+"</td>");
+                    out.println("<td><input id=\"cod_value\" name=\"cod_value\" type=\"hidden\" size=\"50\" value=\""+h.getCodigo()+"\" /></td>");
+                    out.println("<td>Horario</td>");
+                    out.println("<td><input id=\"horario_value\" name=\"horario_value\" type=\"text\" size=\"50\" value=\""+h.getHorario()+"\" /></td>");
+                    out.println("<td>Disciplina</td>");
+                    out.println("<td><select value=\"Disciplina\" id=\"disciplinas\" name=\"disciplinas\">");
+                    List<Disciplina> lsDis = disciplinaFacade.findAll();
+                    for (Disciplina disc : lsDis) {
+                        if(disc.getCodigo()==(h.getDisciplina().getCodigo())){
+                            out.println("<option selected=\"true\" value="+disc.getCodigo()+">"+disc.getNome()+"</option>" );
+                        }else{
+                            out.println("<option value="+disc.getCodigo()+">"+disc.getNome()+"</option>" );
+                        }
+                    }
+                    out.println("</td></select>");
+                    out.println("<td>Turma</td>");
+                    out.println("<td><input id=\"turma_value\" name=\"turma_value\" type=\"text\" size=\"50\" value=\""+h.getTurma()+"\" /></td>");
+                    out.println("<td>Dia da semana</td>");
+                    out.println("<td><select name=\"dia_value\">");
+                    for(EnumDiaDaSemana dia : EnumDiaDaSemana.values()){
+                        if(h.getDia()==dia){
+                            out.println("<option selected=\"true\" value="+dia.name()+">"+dia.name()+"</option>");
+                        }else{
+                            out.println("<option value="+dia.name()+">"+dia.name()+"</option>");
+                        }
+                    }
+                    out.println("</select></td>");
+                    out.println("</tr>");
 
-            out.println("<h2>Cadastrar Horario</h2>");
-            out.println("<form action=\"horarioServlet\" method=\"post\">");
-            out.println("<table>\n<tr>");
-            out.println("<td>Horario</td>");
-            out.println("<td><input name=\"horario_value\" type=\"text\" size=\"50\" value=\"\"/></td>");
-            out.println("</tr><tr>");
-            out.println("<td>Disciplina</td>");
-            out.println("<td><select name=\"disciplina\">");
-            List<Disciplina> lsDisciplinas = disciplinaFacade.findAll();
-            for (Disciplina dis : lsDisciplinas) {
-                out.println("<option value="+dis.getCodigo()+">"+dis.getNome()+"</option>" );
+                    out.println("</tr>\n</table>");
+                    out.println("<input name=\"btn_editar\" type=\"submit\" value=\"Editar\"/><input name=\"btn_deletar\" type=\"submit\" value=\"Deletar\"/>\n</form>");
+                }
+            }else if(request.getParameter("mode")!= null && request.getParameter("mode").equals("list")){
+                out.println("<h2>Horarios Cadastrados</h2>");
+                List<Horario> list = facade.findAll();
+                for (Horario hor : list) {
+                    out.println(hor + "<br/>");
+                }
             }
-            out.println("</select></td>");
-            out.println("</tr>\n</table>");
-            out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
             if (request.getParameter("btn_cadastrar") != null && request.getParameter("btn_cadastrar").equals("Cadastrar")) {
                 try {
                     out.println("<font color=\"red\">");
@@ -82,12 +149,38 @@ public class horarioServlet extends HttpServlet {
                 } finally {
                     out.println("</font>");
                 }
-            }
-
-            out.println("<h2>Horarios Cadastrados</h2>");
-            List<Horario> list = facade.findAll();
-            for (Horario hor : list) {
-                out.println(hor + "<br/>");
+            }else if (request.getParameter("btn_deletar") != null && request.getParameter("btn_deletar").equals("Deletar")) {
+                try {
+                    out.println("<font color=\"red\">");
+                    Horario hor = facade.find(Integer.parseInt(request.getParameter("cod_value")));
+                    facade.remove(hor);
+                    out.println("Horario deletado com sucesso.Atualize a página");
+                } catch (Exception e) {
+                    out.println("Erro ao gravar Horario.\n");
+                    for (StackTraceElement element : e.getStackTrace()) {
+                        out.println(element+"<br>");
+                    }
+                } finally {
+                    out.println("</font>");
+                }
+            }else if (request.getParameter("btn_editar") != null && request.getParameter("btn_editar").equals("Editar")) {
+                try {
+                    out.println("<font color=\"red\">");
+                    Horario hor = facade.find(Integer.parseInt(request.getParameter("cod_value")));
+                    hor.setDisciplina(disciplinaFacade.find(Integer.parseInt(request.getParameter("disciplinas"))));
+                    hor.setTurma(request.getParameter("turma_value"));
+                    hor.setHorario(request.getParameter("horario_value"));
+                    hor.setDia(EnumDiaDaSemana.valueOf(request.getParameter("dia_value")));
+                    facade.edit(hor);
+                    out.println("Horario alterado com sucesso.Atualize a página");
+                } catch (Exception e) {
+                    out.println("Erro ao gravar Horario.\n");
+                    for (StackTraceElement element : e.getStackTrace()) {
+                        out.println(element+"<br>");
+                    }
+                } finally {
+                    out.println("</font>");
+                }
             }
             out.println("<br/>");
             out.println("<a href=\".\">Voltar</a>");
