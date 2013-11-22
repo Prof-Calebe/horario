@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>Cadastros</h1>
-        <a href="disciplinaServlet">Disciplinas</a><br/>
+        <a href="disciplinaServlet?mode=cad">Disciplinas</a><br/>
         <a href="horarioServlet">Horarios</a><br/>
         <a href="professorServlet">Professores</a><br/>
         <a href="salaServlet">Sala</a><br/>
