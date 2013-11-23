@@ -25,18 +25,28 @@ public class Horario implements Serializable{
     private Disciplina disciplina;
     private String turma;
     private EnumDiaDaSemana dia;
+    private Sala sala;
 
     public Horario(){}
-    public Horario(String horario, Disciplina disciplina, String turma, EnumDiaDaSemana dia) {
+    public Horario(String horario, Disciplina disciplina, String turma, EnumDiaDaSemana dia,Sala sala) {
         this.horario = horario;
         this.disciplina = disciplina;
         this.turma = turma;
         this.dia = dia;
+        this.sala = sala;
     }
 
     @Override
     public String toString() {
-        return horario+":"+disciplina+". Turma:"+turma;
+        return dia.name()+":"+horario+":"+disciplina+". Turma:"+turma+". Sala:"+sala;
+    }
+
+    public Sala getSala() {
+        return sala;
+    }
+
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
     
     

@@ -7,8 +7,6 @@
 package br.edu.horario.models;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,17 +21,13 @@ public class Sala implements Serializable{
     private static final long serialVersionUID = 5L;
     @Id @GeneratedValue
     private int codigo;
-//    @ElementCollection
-//    private ArrayList<Horario> lsHorarios;
     private String numeroSala;
     private String numeroPredio;
     
     public Sala(){
-//        this.lsHorarios = new ArrayList<>();
     }
 
     public Sala(String numeroSala, String numeroPredio) {
-//        this.lsHorarios = new ArrayList<>();
         this.numeroSala = numeroSala;
         this.numeroPredio = numeroPredio;
     }
@@ -46,13 +40,6 @@ public class Sala implements Serializable{
         this.codigo = codigo;
     }
 
-//    public void setLsHorarios(ArrayList<Horario> lsHorarios) {
-//        this.lsHorarios = lsHorarios;
-//    }
-//    
-//    public ArrayList<Horario> getLsHorarios() {
-//        return lsHorarios;
-//    }
     public String getNumeroSala() {
         return numeroSala;
     }
@@ -68,24 +55,11 @@ public class Sala implements Serializable{
     public void setNumeroPredio(String numeroPredio) {
         this.numeroPredio = numeroPredio;
     }
-    
-//    public void addHorario(Horario horario){
-//        lsHorarios.add(horario);
-//    }
 
     @Override
     public String toString() {
-//        return "Sala:"+numeroSala+", prédio:"+numeroPredio+" Qtde horários:"+lsHorarios.size();
           return "Sala:"+numeroSala+", prédio:"+numeroPredio;
     }
-    
-//    public String toStringAllHorarios(){
-//        String out = "Sala:"+numeroSala+", prédio:"+numeroPredio+" \n";
-//        for(Horario hor : lsHorarios){
-//            out += hor + "\n";
-//        }
-//        return out;
-//    }
-    
+
     
 }

@@ -75,6 +75,7 @@ public class disciplinaServlet extends HttpServlet {
                 for (Disciplina disc : list) {
                     out.println("<option value="+disc.getCodigo()+">"+disc.getNome()+"</option>" );
                 }
+                out.println("</select>");
                 if(request.getParameter("cod")!=null){
                     Disciplina dis = facade.find(Integer.parseInt(request.getParameter("cod")));
                     out.println("<tr>");

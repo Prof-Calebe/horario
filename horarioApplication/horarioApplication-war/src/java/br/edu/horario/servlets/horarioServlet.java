@@ -8,9 +8,11 @@ package br.edu.horario.servlets;
 
 import br.edu.horario.jpa.DisciplinaFacade;
 import br.edu.horario.jpa.HorarioFacade;
+import br.edu.horario.jpa.SalaFacade;
 import br.edu.horario.models.Disciplina;
 import br.edu.horario.models.EnumDiaDaSemana;
 import br.edu.horario.models.Horario;
+import br.edu.horario.models.Sala;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -32,6 +34,9 @@ public class horarioServlet extends HttpServlet {
 
     @EJB
     HorarioFacade facade = new HorarioFacade();
+    
+    @EJB
+    SalaFacade salaFacade = new SalaFacade();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -68,13 +73,32 @@ public class horarioServlet extends HttpServlet {
                 out.println("<form action=\"horarioServlet?mode=cad\" method=\"post\">");
                 out.println("<table>\n<tr>");
                 out.println("<td>Horario</td>");
-                out.println("<td><input name=\"horario_value\" type=\"text\" size=\"50\" value=\"\"/></td>");
+                out.println("<td><select name=\"horario_value\">");
+                for(int i=1;i<=20;i++){
+                    out.println("<option value="+i+">"+i+"</option>");
+                }
+                out.println("</select></td></tr>");
+                out.println("<tr><td>Turma</td>");
+                out.println("<td><input id=\"turma_value\" name=\"turma_value\" type=\"text\" size=\"50\" /></td>");
                 out.println("</tr><tr>");
                 out.println("<td>Disciplina</td>");
                 out.println("<td><select name=\"disciplina\">");
                 List<Disciplina> lsDisciplinas = disciplinaFacade.findAll();
                 for (Disciplina dis : lsDisciplinas) {
                     out.println("<option value="+dis.getCodigo()+">"+dis.getNome()+"</option>" );
+                }
+                out.println("</select></td></tr>");
+                out.println("<tr><td>Dia</td>");
+                out.println("<td><select name=\"dia_value\">");
+                for(EnumDiaDaSemana dia : EnumDiaDaSemana.values()){
+                    out.println("<option value="+dia.name()+">"+dia.name()+"</option>");
+                }
+                out.println("</select></td></tr>");
+                out.println("<tr><td>Sala</td>");
+                List<Sala> lsSalas = salaFacade.findAll();
+                out.println("<td><select name=\"sala_value\">");
+                for(Sala sala : lsSalas){
+                    out.println("<option value="+sala.getCodigo()+">"+sala+"</option>");
                 }
                 out.println("</select></td>");
                 out.println("</tr>\n</table>");
@@ -125,6 +149,17 @@ public class horarioServlet extends HttpServlet {
                         }
                     }
                     out.println("</select></td>");
+                     out.println("<td>Disciplina</td>");
+                    out.println("<td><select id=\"salas\" name=\"salas\">");
+                    List<Sala> lsSalas = salaFacade.findAll();
+                    for (Sala sala : lsSalas) {
+                        if(sala.getCodigo()==(h.getSala().getCodigo())){
+                            out.println("<option selected=\"true\" value="+sala.getCodigo()+">"+sala+"</option>" );
+                        }else{
+                            out.println("<option value="+sala.getCodigo()+">"+sala+"</option>" );
+                        }
+                    }
+                    out.println("</td></select>");
                     out.println("</tr>");
 
                     out.println("</tr>\n</table>");
@@ -142,7 +177,7 @@ public class horarioServlet extends HttpServlet {
             if (request.getParameter("btn_cadastrar") != null && request.getParameter("btn_cadastrar").equals("Cadastrar")) {
                 try {
                     out.println("<font color=\"red\">");
-                    Horario hor = new Horario(request.getParameter("horario_value"),disciplinaFacade.find(Integer.parseInt(request.getParameter("disciplina"))),"N",EnumDiaDaSemana.SEGUNDA);
+                    Horario hor = new Horario(request.getParameter("horario_value"),disciplinaFacade.find(Integer.parseInt(request.getParameter("disciplina"))),request.getParameter("turma_value"),EnumDiaDaSemana.valueOf(request.getParameter("dia_value")),salaFacade.find(Integer.parseInt(request.getParameter("sala_value"))));
                     facade.create(hor);
                     out.println("Horario cadastrado com sucesso.");
                 } catch (Exception e) {
@@ -171,6 +206,7 @@ public class horarioServlet extends HttpServlet {
                     hor.setTurma(request.getParameter("turma_value"));
                     hor.setHorario(request.getParameter("horario_value"));
                     hor.setDia(EnumDiaDaSemana.valueOf(request.getParameter("dia_value")));
+                    hor.setSala(salaFacade.find(Integer.parseInt(request.getParameter("salas"))));
                     facade.edit(hor);
                     out.println("Horario alterado com sucesso.Atualize a página");
                 } catch (Exception e) {
