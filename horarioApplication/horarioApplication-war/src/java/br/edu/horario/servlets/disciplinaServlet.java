@@ -105,9 +105,6 @@ public class disciplinaServlet extends HttpServlet {
                     out.println("Disciplina cadastrada com sucesso.");
                 } catch (Exception e) {
                     out.println("Erro ao gravar Disciplina.\n");
-                    for (StackTraceElement element : e.getStackTrace()) {
-                        out.println(element+"<br>");
-                    }
                 } finally {
                     out.println("</font>");
                 }
@@ -122,9 +119,7 @@ public class disciplinaServlet extends HttpServlet {
                     out.println("Disciplina alterada com sucesso. Atualize a página.");
                 } catch (Exception e) {
                     out.println("Erro ao gravar Disciplina.\n");
-                    for (StackTraceElement element : e.getStackTrace()) {
-                        out.println(element+"<br>");
-                    }
+
                 } finally {
                     out.println("</font>");
                 }
@@ -136,10 +131,7 @@ public class disciplinaServlet extends HttpServlet {
                     facade.remove(disc);
                     out.println("Disciplina deletada com sucesso. Atualize a página.");
                 } catch (Exception e) {
-                    out.println("Erro ao deletar Disciplina.\n");
-                    for (StackTraceElement element : e.getStackTrace()) {
-                        out.println(element+"<br>");
-                    }
+                    out.println("Erro ao deletar Disciplina.Ela pode estar sendo usada em outra tabela!\n");
                 } finally {
                     out.println("</font>");
                 }

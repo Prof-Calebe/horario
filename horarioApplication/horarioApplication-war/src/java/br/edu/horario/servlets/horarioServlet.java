@@ -62,6 +62,7 @@ public class horarioServlet extends HttpServlet {
             out.println("<a href='horarioServlet?mode=list'>Listar</a>");
             out.println("</div>");
             out.println("<hr>");
+            //HTML cad
             if(request.getParameter("mode")!= null && request.getParameter("mode").equals("cad")){
                 out.println("<h2>Cadastrar Horario</h2>");
                 out.println("<form action=\"horarioServlet?mode=cad\" method=\"post\">");
@@ -78,6 +79,7 @@ public class horarioServlet extends HttpServlet {
                 out.println("</select></td>");
                 out.println("</tr>\n</table>");
                 out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
+                //HTML Edit
             } else if(request.getParameter("mode")!= null && request.getParameter("mode").equals("edit")){
                 out.println("<h2>Editar Horarios</h2>");
                 out.println("<form action=\"horarioServlet?mode=edit\" method=\"post\">");
@@ -128,6 +130,7 @@ public class horarioServlet extends HttpServlet {
                     out.println("</tr>\n</table>");
                     out.println("<input name=\"btn_editar\" type=\"submit\" value=\"Editar\"/><input name=\"btn_deletar\" type=\"submit\" value=\"Deletar\"/>\n</form>");
                 }
+                //HTML list
             }else if(request.getParameter("mode")!= null && request.getParameter("mode").equals("list")){
                 out.println("<h2>Horarios Cadastrados</h2>");
                 List<Horario> list = facade.findAll();
@@ -135,6 +138,7 @@ public class horarioServlet extends HttpServlet {
                     out.println(hor + "<br/>");
                 }
             }
+            //Request cadastrar
             if (request.getParameter("btn_cadastrar") != null && request.getParameter("btn_cadastrar").equals("Cadastrar")) {
                 try {
                     out.println("<font color=\"red\">");
@@ -143,12 +147,10 @@ public class horarioServlet extends HttpServlet {
                     out.println("Horario cadastrado com sucesso.");
                 } catch (Exception e) {
                     out.println("Erro ao gravar Horario.\n");
-                    for (StackTraceElement element : e.getStackTrace()) {
-                        out.println(element+"<br>");
-                    }
                 } finally {
                     out.println("</font>");
                 }
+                //Request deletar
             }else if (request.getParameter("btn_deletar") != null && request.getParameter("btn_deletar").equals("Deletar")) {
                 try {
                     out.println("<font color=\"red\">");
@@ -156,13 +158,11 @@ public class horarioServlet extends HttpServlet {
                     facade.remove(hor);
                     out.println("Horario deletado com sucesso.Atualize a página");
                 } catch (Exception e) {
-                    out.println("Erro ao gravar Horario.\n");
-                    for (StackTraceElement element : e.getStackTrace()) {
-                        out.println(element+"<br>");
-                    }
+                    out.println("Erro ao editar Horario.\n");
                 } finally {
                     out.println("</font>");
                 }
+                //Request editar
             }else if (request.getParameter("btn_editar") != null && request.getParameter("btn_editar").equals("Editar")) {
                 try {
                     out.println("<font color=\"red\">");
@@ -174,10 +174,7 @@ public class horarioServlet extends HttpServlet {
                     facade.edit(hor);
                     out.println("Horario alterado com sucesso.Atualize a página");
                 } catch (Exception e) {
-                    out.println("Erro ao gravar Horario.\n");
-                    for (StackTraceElement element : e.getStackTrace()) {
-                        out.println(element+"<br>");
-                    }
+                    out.println("Erro ao deletar Horario.Ele pode estar sendo usada em outra tabela!\n");
                 } finally {
                     out.println("</font>");
                 }

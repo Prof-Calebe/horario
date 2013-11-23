@@ -7,8 +7,6 @@
 package br.edu.horario.servlets;
 
 import br.edu.horario.jpa.ProfessorFacade;
-import br.edu.horario.models.Disciplina;
-import br.edu.horario.models.Horario;
 import br.edu.horario.models.Professor;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -61,6 +59,7 @@ public class professorServlet extends HttpServlet {
             out.println("<a href='professorServlet?mode=list'>Listar</a>");
             out.println("</div>");
             out.println("<hr>");
+            //HTML cad
             if(request.getParameter("mode")!=null && request.getParameter("mode").equals("cad")){
                 out.println("<h2>Cadastrar Professores</h2>");
                 out.println("<form action=\"professorServlet?mode=cad\" method=\"post\">");
@@ -72,6 +71,7 @@ public class professorServlet extends HttpServlet {
                 out.println("<td><input name=\"tia_value\" type=\"text\" size=\"50\"/></td>");
                 out.println("</tr>\n</table>");
                 out.println("<input name=\"btn_cadastrar\" type=\"submit\" value=\"Cadastrar\"/>\n</form>");
+                //HTML Edit
             } else if(request.getParameter("mode")!=null && request.getParameter("mode").equals("edit")){
                 out.println("<h2>Editar Professores</h2>");
                 out.println("<form action=\"professorServlet?mode=edit\" method=\"post\">");
@@ -95,6 +95,7 @@ public class professorServlet extends HttpServlet {
                     out.println("</tr>\n</table>");
                     out.println("<input name=\"btn_editar\" type=\"submit\" value=\"Editar\"/><input name=\"btn_deletar\" type=\"submit\" value=\"Deletar\"/>\n</form>");
                 }
+                //HTML list
             } else if(request.getParameter("mode")!=null && request.getParameter("mode").equals("list")){
                 out.println("<h2>Professores Cadastrados</h2>");
                 List<Professor> list = facade.findAll();
@@ -102,6 +103,7 @@ public class professorServlet extends HttpServlet {
                     out.println(prof + "<br/>");
                 }
             }
+            //Request cadastrar
             if (request.getParameter("btn_cadastrar") != null && request.getParameter("btn_cadastrar").equals("Cadastrar")) {
                 try {
                     out.println("<font color=\"red\">");
@@ -110,12 +112,10 @@ public class professorServlet extends HttpServlet {
                     out.println("Professor cadastrado com sucesso.");
                 } catch (Exception e) {
                     out.println("Erro ao gravar Professor.\n");
-                    for (StackTraceElement element : e.getStackTrace()) {
-                        out.println(element+"<br>");
-                    }
                 } finally {
                     out.println("</font>");
                 }
+                //Request Deletar
             }else if (request.getParameter("btn_deletar") != null && request.getParameter("btn_deletar").equals("Deletar")) {
                 try {
                     out.println("<font color=\"red\">");
@@ -123,13 +123,11 @@ public class professorServlet extends HttpServlet {
                     facade.remove(prof);
                     out.println("Professor deletado com sucesso.");
                 } catch (Exception e) {
-                    out.println("Erro ao gravar Professor.\n");
-                    for (StackTraceElement element : e.getStackTrace()) {
-                        out.println(element+"<br>");
-                    }
+                    out.println("Erro ao deletar Professor.Ela pode estar sendo usada em outra tabela!\n");
                 } finally {
                     out.println("</font>");
                 }
+                //Request Editar
             }else if (request.getParameter("btn_editar") != null && request.getParameter("btn_editar").equals("Editar")) {
                 try {
                     out.println("<font color=\"red\">");
@@ -139,10 +137,7 @@ public class professorServlet extends HttpServlet {
                     facade.edit(prof);
                     out.println("Professor alterado com sucesso.");
                 } catch (Exception e) {
-                    out.println("Erro ao gravar Professor.\n");
-                    for (StackTraceElement element : e.getStackTrace()) {
-                        out.println(element+"<br>");
-                    }
+                    out.println("Erro ao editar Professor.\n");
                 } finally {
                     out.println("</font>");
                 }
