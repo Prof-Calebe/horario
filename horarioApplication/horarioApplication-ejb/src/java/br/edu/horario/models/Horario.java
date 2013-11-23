@@ -26,14 +26,16 @@ public class Horario implements Serializable{
     private String turma;
     private EnumDiaDaSemana dia;
     private Sala sala;
+    private Professor professor;
 
     public Horario(){}
-    public Horario(String horario, Disciplina disciplina, String turma, EnumDiaDaSemana dia,Sala sala) {
+    public Horario(String horario, Disciplina disciplina, String turma, EnumDiaDaSemana dia,Sala sala,Professor professor) {
         this.horario = horario;
         this.disciplina = disciplina;
         this.turma = turma;
         this.dia = dia;
         this.sala = sala;
+        this.professor = professor;
     }
 
     @Override
@@ -48,9 +50,16 @@ public class Horario implements Serializable{
     public void setSala(Sala sala) {
         this.sala = sala;
     }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
     
-    
-    
+        
     public int getCodigo() {
         return codigo;
     }

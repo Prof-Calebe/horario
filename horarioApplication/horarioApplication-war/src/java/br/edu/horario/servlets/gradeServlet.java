@@ -13,9 +13,12 @@ import br.edu.horario.jpa.ReservaFacade;
 import br.edu.horario.jpa.SalaFacade;
 import br.edu.horario.models.Disciplina;
 import br.edu.horario.models.Horario;
+import br.edu.horario.models.Professor;
+import br.edu.horario.models.Sala;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -99,23 +102,111 @@ public class gradeServlet extends HttpServlet {
                     }
                     for(Horario h : lsJoin){
                         table = table.replace("<td id='"+h.getHorario()+"."+h.getDia().ordinal()+"'>","<td>"+h.getDisciplina().getNome());
-                        /*switch(h.getDia()){
-                            case SEGUNDA:
-                                out.println("<td>"+h.getHorario()+"</td>");
-                                out.println("<td>"+h.getDisciplina().getNome()+"</td>");
-                                break;
-                            case TERCA:
-                                break;
-                            case QUARTA:
-                                break;
-                            case QUINTA:
-                                break;
-                            case SEXTA:
-                                break;
-                            case SABADO:
-                                break;
-                            default:
-                        }*/
+                    }
+                    out.println(table);
+                    out.println("</table>");
+                    
+                }
+            } //HTML disciplina  
+            else if(request.getParameter("mode") != null && request.getParameter("mode").equals("turma")){
+                out.println("<h2>Grades Por Turma</h2>");
+                out.println("<select  id=\"selectbox\" name=\"selectbox\" onchange=\"changeFunc();\">");
+                out.println("<option value=0 selected=\"true\">Selecione uma turma</option>");
+                List<Horario> lsHorarios = horarioFacade.findAll();
+                List<String> lsHorariosUnique = new ArrayList<>();
+                for(Horario h : lsHorarios){
+                    if(!lsHorariosUnique.contains(h.getTurma())) lsHorariosUnique.add(h.getTurma());
+                }
+                for (String turma : lsHorariosUnique) {
+                    out.println("<option value="+turma+">"+turma+"</option>" );
+                }
+                out.println("</select>");
+                if(request.getParameter("cod")!=null){
+                    String cod = request.getParameter("cod");
+                    List<Horario> lsJoin = new ArrayList<Horario>();
+                    for(Horario h : lsHorarios){
+                        if(h.getTurma().equals(cod)) lsJoin.add(h);
+                    }
+                    out.println("<hr>");
+                    out.println("<table align='center' width='75%' height='75%' border='1' cellspacing='5' cellpadding='5' bgcolor='#F1F1F1'>");
+                    String table = "<tr bgcolor='#FFFFFF'><th>Horario</th><th>Segunda</th><th>Terca</th><th>Quarta</th><th>Quinta</th><th>Sexta</th><th>Sabado</th></th>";
+                    for(int i=1;i<=20;i++){
+                        table += " <tr bgcolor='#FFFFFF' id=\""+i+"\"> ";
+                        for(int j=0;j<7;j++){
+                            table+="<td id='" +String.valueOf(i)+"."+String.valueOf(j)+"'> </td> ";
+                        }
+                        table+=" </tr> ";
+                    }
+                    for(Horario h : lsJoin){
+                        table = table.replace("<td id='"+h.getHorario()+"."+h.getDia().ordinal()+"'>","<td>"+h.getDisciplina().getNome());
+                    }
+                    out.println(table);
+                    out.println("</table>");
+                    
+                }
+            }//HTML sala  
+            else if(request.getParameter("mode") != null && request.getParameter("mode").equals("sala")){
+                out.println("<h2>Grades Por Sala</h2>");
+                out.println("<select  id=\"selectbox\" name=\"selectbox\" onchange=\"changeFunc();\">");
+                out.println("<option value=0 selected=\"true\">Selecione uma sala</option>");
+                List<Horario> lsHorarios = horarioFacade.findAll();
+                List<Sala> lsSalas = salaFacade.findAll();
+                for(Sala sala : lsSalas){
+                       out.println("<option value="+sala.getCodigo()+">"+sala+"</option>" );
+                }
+                out.println("</select>");
+                if(request.getParameter("cod")!=null){
+                    int cod = Integer.parseInt(request.getParameter("cod"));
+                    List<Horario> lsJoin = new ArrayList<Horario>();
+                    for(Horario h : lsHorarios){
+                        if(h.getSala().getCodigo()==cod) lsJoin.add(h);
+                    }
+                    out.println("<hr>");
+                    out.println("<table align='center' width='75%' height='75%' border='1' cellspacing='5' cellpadding='5' bgcolor='#F1F1F1'>");
+                    String table = "<tr bgcolor='#FFFFFF'><th>Horario</th><th>Segunda</th><th>Terca</th><th>Quarta</th><th>Quinta</th><th>Sexta</th><th>Sabado</th></th>";
+                    for(int i=1;i<=20;i++){
+                        table += " <tr bgcolor='#FFFFFF' id=\""+i+"\"> ";
+                        for(int j=0;j<7;j++){
+                            table+="<td id='" +String.valueOf(i)+"."+String.valueOf(j)+"'> </td> ";
+                        }
+                        table+=" </tr> ";
+                    }
+                    for(Horario h : lsJoin){
+                        table = table.replace("<td id='"+h.getHorario()+"."+h.getDia().ordinal()+"'>","<td>"+h.getDisciplina().getNome());
+                    }
+                    out.println(table);
+                    out.println("</table>");
+                    
+                }
+            }//HTML sala  
+            else if(request.getParameter("mode") != null && request.getParameter("mode").equals("professor")){
+                out.println("<h2>Grades Por Professor</h2>");
+                out.println("<select  id=\"selectbox\" name=\"selectbox\" onchange=\"changeFunc();\">");
+                out.println("<option value=0 selected=\"true\">Selecione um professor</option>");
+                List<Horario> lsHorarios = horarioFacade.findAll();
+                List<Professor> lsProf = professorFacade.findAll();
+                for(Professor prof : lsProf){
+                       out.println("<option value="+prof.getCodigo()+">"+prof.getNome()+"</option>" );
+                }
+                out.println("</select>");
+                if(request.getParameter("cod")!=null){
+                    int cod = Integer.parseInt(request.getParameter("cod"));
+                    List<Horario> lsJoin = new ArrayList<Horario>();
+                    for(Horario h : lsHorarios){
+                        if(h.getProfessor().getCodigo()==cod) lsJoin.add(h);
+                    }
+                    out.println("<hr>");
+                    out.println("<table align='center' width='75%' height='75%' border='1' cellspacing='5' cellpadding='5' bgcolor='#F1F1F1'>");
+                    String table = "<tr bgcolor='#FFFFFF'><th>Horario</th><th>Segunda</th><th>Terca</th><th>Quarta</th><th>Quinta</th><th>Sexta</th><th>Sabado</th></th>";
+                    for(int i=1;i<=20;i++){
+                        table += " <tr bgcolor='#FFFFFF' id=\""+i+"\"> ";
+                        for(int j=0;j<7;j++){
+                            table+="<td id='" +String.valueOf(i)+"."+String.valueOf(j)+"'> </td> ";
+                        }
+                        table+=" </tr> ";
+                    }
+                    for(Horario h : lsJoin){
+                        table = table.replace("<td id='"+h.getHorario()+"."+h.getDia().ordinal()+"'>","<td>"+h.getDisciplina().getNome());
                     }
                     out.println(table);
                     out.println("</table>");
