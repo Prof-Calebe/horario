@@ -25,7 +25,7 @@ public class DisciplinaFacade extends AbstractFacade<Disciplina> {
     protected EntityManager getEntityManager() {
         return em;
     }
-
+    
     public DisciplinaFacade() {
         super(Disciplina.class);
     }
